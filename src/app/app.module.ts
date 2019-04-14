@@ -8,12 +8,14 @@ import { PokemonComponent } from './pokemon/pokemon.component';
 import { HeaderComponent } from './header/header.component';
 
 import { JwtModule } from '@auth0/angular-jwt';
+import { AuthComponent } from './auth/auth.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PokemonComponent,
     HeaderComponent,
+    AuthComponent,
   ],
   imports: [
     BrowserModule,

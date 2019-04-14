@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AuthService } from '../auth.service';
-import { Observable } from 'rxjs';
+import { JwtService } from '../jwt.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-pokemon',
@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 export class PokemonComponent implements OnInit {
   title = 'pokemon';
   list: any;
-  token: any;
+  token = localStorage.getItem('access_token');
 
   httpOptions = {
     headers: new HttpHeaders({
@@ -20,38 +20,25 @@ export class PokemonComponent implements OnInit {
     })
   };
 
-
-
   constructor(private http: HttpClient,
-    private authService: AuthService) { }
+    private jwtService: JwtService,
+    private route: ActivatedRoute,
+    private router: Router) { }
 
 
 
   ngOnInit(): void {
-    this.httpOptions.headers.set('Authorization', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE1N…aZ-FtkYuLW9xXkB4AdP-myaPkg8yFA6sM4AU_FutkZPdbVYRE');
-    let obs1 = this.http.post(
-      'http://127.0.0.1:8000/api/login_check',
-      {
-        "email": "test@senapi.fr",
-        "password": "testtest"
-      }
-    )
+    const headers = { Authorization: `Bearer ${this.token}` };
+
+    const id = this.route.snapshot.params['id'] ? this.route.snapshot.params['id'] : 1;
+
+    let obs1 = this.http.get(`http://127.0.0.1:8000/api/pokemon?page=${id}`, { headers });
     obs1.subscribe(
       (response) => {
+        this.list = response['hydra:member'];
+        console.log(response['hydra:totalItems'])
         console.log(response)
-        this.token = response;
       });
-
-    this.httpOptions.headers.set('Authorization', this.token);
-
-    let obs = this.http.get('http://127.0.0.1:8000/api/pokemon/1', this.httpOptions);
-    obs.subscribe(
-      (response) => {
-        console.log(response)
-        this.list = response;
-      });
-
   }
-
 
 }

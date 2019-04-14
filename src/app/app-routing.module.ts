@@ -4,7 +4,7 @@ import { PokemonComponent } from './pokemon/pokemon.component';
 import { AppComponent } from './app.component';
 
 const routes: Routes = [
-  { path: 'pokemons', component: PokemonComponent },
+  { path: 'pokemons/:id', component: PokemonComponent },
   { path: '', component: PokemonComponent },
   { path: '**', component: PokemonComponent }
 ];

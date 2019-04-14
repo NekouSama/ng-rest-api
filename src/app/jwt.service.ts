@@ -12,11 +12,12 @@ export class JwtService {
 
   login(email: string, password: string) {
     return this.httpClient.post<{ access_token: string }>('http://127.0.0.1:8000/api/login_check', { email, password }).pipe(tap(res => {
-      localStorage.setItem('access_token', res.access_token);
+      localStorage.setItem('access_token', res['token']);
     }))
   }
 
   logout() {
+    //console.log(localStorage.getItem('access_token'))
     localStorage.removeItem('access_token');
   }
 
